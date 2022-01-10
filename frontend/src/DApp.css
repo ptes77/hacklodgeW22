@@ -1,19 +1,19 @@
-.App {
+.DApp {
   text-align: center;
 }
 
-.App-logo {
+.DApp-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
+  .DApp-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
-.App-header {
+.DApp-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -24,7 +24,7 @@
   color: white;
 }
 
-.App-link {
+.DApp-link {
   color: #61dafb;
 }
 
