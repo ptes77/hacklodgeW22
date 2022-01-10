@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  color: #000000;
+  height: 10vh;
+  max-width: 1000px;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.btn-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+.fixed-top {
+  background-color: white;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.profile button:not(:first-child) {
+  margin-left: 10px;
+}
