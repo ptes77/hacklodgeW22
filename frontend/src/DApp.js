@@ -6,13 +6,19 @@ import "./DApp.css";
 
 function DApp() {
   const [showModal, setShowModal] = useState(false);
+  const [userAddress, setUserAddress] = useState("");
+
   function toggleModal() {
     setShowModal(!showModal);
   }
 
   return (
     <div className="DApp">
-      <Header toggleModal={toggleModal} />
+      <Header
+        toggleModal={toggleModal}
+        userAddress={userAddress}
+        setUserAddress={setUserAddress}
+      />
 
       <div className="DApp-body">
         <img src={logo} className="DApp-logo my-5" alt="logo" />
@@ -38,7 +44,13 @@ function DApp() {
         <img src={logo} className="DApp-logo my-5" alt="logo" />
         <img src={logo} className="DApp-logo my-5" alt="logo" />
       </div>
-      {showModal && <ConnectWalletModal toggleModal={toggleModal} />}
+      {showModal && (
+        <ConnectWalletModal
+          toggleModal={toggleModal}
+          userAddress={userAddress}
+          setUserAddress={setUserAddress}
+        />
+      )}
     </div>
   );
 }

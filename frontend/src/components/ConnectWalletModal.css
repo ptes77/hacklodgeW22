@@ -1,7 +1,7 @@
 .btn-modal-close {
   position: absolute;
   top: 4px;
-  right: 0;
+  right: 4px;
   padding: 20px !important;
 }
 
@@ -11,12 +11,17 @@
   border-radius: 25px !important;
   height: 50px;
   width: 100%;
-  font-weight: 600;
+  font-weight: 600 !important;
   z-index: 102;
+  margin-top: 8px;
 }
 
 .btn-wallet-opt:hover {
   border: 1px solid black !important;
+}
+
+.fw-600 {
+  font-weight: 600;
 }
 
 .wallet-modal {
@@ -26,4 +31,8 @@
   width: 100%;
   height: 100%;
   background: rgb(0, 0, 0, 0.4);
+}
+
+.no-wallet {
+  font-size: 18px;
 }
