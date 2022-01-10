@@ -1,0 +1,113 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.2;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+import "hardhat/console.sol";
+
+contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
+    using Counters for Counters.Counter;
+
+    // Token timestamp
+    uint private _timestamp; // ez: later switch to Token objects
+
+    // Mapping from token ID to timestamps
+    mapping(uint256 => uint) private _timestamps;
+    uint256 private _zerothTokenId = 0; 
+    uint256 private _highestId = 0;
+
+    Counters.Counter private _tokenIdCounter;
+
+    constructor() ERC721("RVotes", "RV") {} //ez: makes the collection
+
+    function safeMint(address to) public onlyOwner {
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+        _timestamps[tokenId] = block.timestamp;
+        // ez: above sets the timestamp, uses UNIX timestamp in seconds since epoch
+        _highestId++;
+    }
+
+    // ez: on deploy, call pause to prevent transfers of the tokens
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    function expireTokens() public onlyOwner {
+        uint tendays = 864000;
+        _expireTokens(tendays);
+    }
+
+    function _expireTokens(uint timeElapsed) public onlyOwner {
+        // ez: burns ALL the tokens that have a timestamp greater than 10 days ago
+        // ez: prolly very inefficient XD
+        uint256 currId = _zerothTokenId;
+        uint thresholdTimestamp = block.timestamp - timeElapsed;
+        uint timestamp = _timestamps[currId];
+        while (timestamp < thresholdTimestamp && currId <= _highestId - 1) {
+            _burn(currId);
+            currId++;
+            timestamp = _timestamps[currId];
+            console.log("burned token at id: ");
+            console.log("currId");
+        }
+        _zerothTokenId = currId;
+    }
+
+    function awardReputation(address to) public onlyOwner {
+        // ez: lol it just awards 10 reputation
+        _awardReputation(to, 10);
+    }
+
+    function _awardReputation(address to, uint amount) public onlyOwner {
+        require(amount <= 30, "Reputation amount is too high xd");
+        for (uint i=0; i<amount; i++){
+            safeMint(to);
+        }
+    }
+
+    function isOwner(address owner) public view returns (bool) {
+        if (balanceOf(owner) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    // The following functions are overrides required by Solidity.
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+
+    // Functions for eilleen for testing:
+    function getTimestamp(uint256 tokenId) public view returns (uint) {
+        return (_timestamps[tokenId]);
+    }
+
+    // ez: 721 already has function ownerOf
+    
+}
