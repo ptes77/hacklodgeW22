@@ -1,14 +1,15 @@
-import logo from './logo.svg';
-import './DApp.css';
+import logo from "./steve.jpeg";
+import Header from "./components/Header.js";
+import "./DApp.css";
 
 function DApp() {
   return (
     <div className="DApp">
-      <header className="DApp-header">
-        <img src={logo} className="DApp-logo" alt="logo" />
-        <p>
-          temp landing site
-        </p>
+      <Header />
+
+      <div className="DApp-body">
+        <img src={logo} className="DApp-logo my-5" alt="logo" />
+        <p>temp landing site</p>
         <a
           className="DApp-link"
           href="https://op.gg/summoner/Tevster"
@@ -17,7 +18,7 @@ function DApp() {
         >
           the legend himself
         </a>
-      </header>
+      </div>
     </div>
   );
 }
