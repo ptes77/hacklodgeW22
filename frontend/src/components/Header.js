@@ -6,16 +6,24 @@ export default function Header(props) {
   return (
     <nav className="border-bottom fixed-top">
       <div className="px-4 mx-auto header">
-        <div className="logo">sorry</div>
+        <div className="logo">
+          <a href="/">sorry</a>
+        </div>
         <div className="profile">
           <ConnectWalletButton {...props} />
-          <button
-            type="button"
-            className="btn btn-outline-dark btn-circle"
-            onClick={() => alert("LOL")}
+          <a
+            href="https://twitter.com/eilleeenz"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            :D
-          </button>
+            <button
+              type="button"
+              className="btn btn-outline-dark btn-circle"
+              onClick={() => alert("LOL")}
+            >
+              :D
+            </button>
+          </a>
         </div>
       </div>
     </nav>

@@ -1,0 +1,29 @@
+.proposal {
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 8px;
+}
+
+.proposal:hover {
+  border: 1px solid var(--bs-dark);
+}
+
+.proposal-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.proposal-body {
+  font-size: 16px;
+}
+
+.proposal-link {
+  text-decoration: none;
+}
+
+a {
+  color: black;
+}
+
+a:hover {
+  color: black;
+}
