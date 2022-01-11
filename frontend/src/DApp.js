@@ -7,10 +7,17 @@ import { Outlet } from "react-router-dom";
 
 function DApp() {
   const [showModal, setShowModal] = useState(false);
-  const [userAddress, setUserAddress] = useState("");
+  const [userAddress, setUserAddress] = useState(
+    localStorage.getItem("userAddress")
+  );
 
   function toggleModal() {
     setShowModal(!showModal);
+  }
+
+  function setUserAddressFull(userAddress) {
+    setUserAddress(userAddress);
+    localStorage.setItem("userAddress", userAddress);
   }
 
   if (window.ethereum === undefined) {
@@ -70,7 +77,7 @@ function DApp() {
       <Header
         toggleModal={toggleModal}
         userAddress={userAddress}
-        setUserAddress={setUserAddress}
+        setUserAddress={setUserAddressFull}
       />
 
       <div className="DApp-body p-4">
@@ -103,7 +110,7 @@ function DApp() {
         <ConnectWalletModal
           toggleModal={toggleModal}
           userAddress={userAddress}
-          setUserAddress={setUserAddress}
+          setUserAddress={setUserAddressFull}
         />
       )}
     </div>

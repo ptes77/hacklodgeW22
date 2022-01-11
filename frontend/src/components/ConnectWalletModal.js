@@ -45,7 +45,6 @@ export default function ConnectWalletModal(props) {
   }
 
   async function _connectWallet() {
-    console.log("connecting wallet");
     if (!_checkNetwork()) {
       console.log("network check failed");
       return;
@@ -156,7 +155,7 @@ export default function ConnectWalletModal(props) {
           <div className="modal-header justify-content-center">
             <h5 className="modal-title fw-600">Connect wallet</h5>
           </div>
-          <div className="modal-body py-3 mb-1">
+          <div className="modal-body mb-2">
             {userAddress && !connectingWallet ? connectedBody : unconnectedBody}
           </div>
           <button
