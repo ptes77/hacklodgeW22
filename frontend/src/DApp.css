@@ -19,14 +19,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: #000000;
   overflow: hidden;
+  position: relative;
+  top: 88px;
+  min-height: calc(100vh - 88px);
 }
 
 .DApp-link {
   color: #61dafb;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 960px;
 }
 
 @keyframes App-logo-spin {

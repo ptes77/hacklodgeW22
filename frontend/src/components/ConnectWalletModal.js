@@ -8,17 +8,19 @@ export default function ConnectWalletModal(props) {
   const { toggleModal, userAddress, setUserAddress } = props;
   const [networkError, setNetworkError] = useState("");
   const [connectingWallet, setConnectingWallet] = useState(false);
-  const walletDetected = window.ethereum !== undefined;
 
   function shortenAddress(addr) {
     return addr.slice(0, 6) + "..." + addr.slice(-4);
   }
 
   function _checkNetwork() {
-    if (window.ethereum.networkVersion === HARDHAT_NETWORK_ID) {
+    const allowed = ["4", "3", HARDHAT_NETWORK_ID];
+    if (allowed.includes(window.ethereum.networkVersion)) {
       return true;
     }
-    setNetworkError("Please connect Metamask to Localhost:8545");
+    setNetworkError(
+      "Please connect Metamask to Localhost:8545, Rinkeby, or Ropsten"
+    );
     return false;
   }
 
@@ -26,10 +28,10 @@ export default function ConnectWalletModal(props) {
     console.log("Resetting state");
     setNetworkError("");
     setUserAddress("");
+    setConnectingWallet(false);
   }
 
   function _initialize(userAddress) {
-    console.log("SETTING ADDRESS TO ", userAddress);
     setUserAddress(userAddress);
     // Run some function to fetch user data?
   }
@@ -52,7 +54,6 @@ export default function ConnectWalletModal(props) {
     // Reset state if network changes
     window.ethereum.on("chainChanged", ([networkId]) => {
       _resetState();
-      console.log("network changed!");
     });
 
     try {
@@ -71,15 +72,11 @@ export default function ConnectWalletModal(props) {
       }
     }
 
-    console.log("wallet connected!:", userAddress);
-
     // Reset state if user account changes
     window.ethereum.on("accountsChanged", (accounts) => {
       _handleAccountsChanged(accounts);
       console.log("accounts changed!");
     });
-
-    console.log("network errors?", networkError);
   }
 
   const unconnectedBody = (
@@ -106,7 +103,11 @@ export default function ConnectWalletModal(props) {
 
   const connectedBody = (
     <>
-      <a href={"https://www.etherscan.io/address/" + userAddress}>
+      <a
+        href={"https://www.etherscan.io/address/" + userAddress}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <button
           type="button"
           className="btn btn-wallet-opt"
@@ -123,7 +124,6 @@ export default function ConnectWalletModal(props) {
           className="btn btn-wallet-opt"
           onClick={() => {
             setConnectingWallet(true);
-            console.log(connectingWallet);
           }}
         >
           Connect Wallet
@@ -144,41 +144,6 @@ export default function ConnectWalletModal(props) {
     </>
   );
 
-  const noWalletDetected = (
-    <div className="row justify-content-md-center mt-2">
-      <div className="p-4 text-center fw-600">
-        <p className="no-wallet">
-          No Ethereum wallet was detected. <br />
-          <br />
-          <div>
-            Please install
-            <a
-              href="http://metamask.io"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src="https://raw.githubusercontent.com/snapshot-labs/lock/master/connectors/assets/metamask.png"
-                height="28"
-                width="28"
-                className="mx-2 mt-1 mb-2"
-                alt="MetaMask"
-              />
-              MetaMask
-            </a>
-            .
-          </div>
-        </p>
-      </div>
-      <button
-        type="button"
-        className="btn-close btn-modal-close"
-        onClick={() => setTimeout(toggleModal, 200)}
-        aria-label="Close"
-      ></button>
-    </div>
-  );
-
   return (
     <div
       className="wallet-modal"
@@ -188,26 +153,18 @@ export default function ConnectWalletModal(props) {
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          {walletDetected ? (
-            <>
-              <div className="modal-header justify-content-center">
-                <h5 className="modal-title fw-600">Connect wallet</h5>
-              </div>
-              <div className="modal-body py-3 mb-1">
-                {userAddress && !connectingWallet
-                  ? connectedBody
-                  : unconnectedBody}
-              </div>
-              <button
-                type="button"
-                className="btn-close btn-modal-close"
-                onClick={() => setTimeout(toggleModal, 200)}
-                aria-label="Close"
-              ></button>
-            </>
-          ) : (
-            noWalletDetected
-          )}
+          <div className="modal-header justify-content-center">
+            <h5 className="modal-title fw-600">Connect wallet</h5>
+          </div>
+          <div className="modal-body py-3 mb-1">
+            {userAddress && !connectingWallet ? connectedBody : unconnectedBody}
+          </div>
+          <button
+            type="button"
+            className="btn-close btn-modal-close"
+            onClick={() => setTimeout(toggleModal, 200)}
+            aria-label="Close"
+          ></button>
         </div>
       </div>
     </div>

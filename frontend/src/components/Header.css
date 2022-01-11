@@ -24,6 +24,10 @@
   flex: 1 1 auto;
 }
 
+.logo a {
+  text-decoration: none;
+}
+
 .profile {
   display: flex;
   align-items: center;
@@ -31,5 +35,9 @@
 }
 
 .profile button:not(:first-child) {
+  margin-left: 10px;
+}
+
+.profile a {
   margin-left: 10px;
 }
