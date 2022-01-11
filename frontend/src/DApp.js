@@ -1,6 +1,6 @@
 import ConnectWalletModal from "./components/ConnectWalletModal.js";
 import Header from "./components/Header.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./DApp.css";
 import { ethers } from "ethers";
 import { Outlet } from "react-router-dom";
@@ -10,6 +10,20 @@ function DApp() {
   const [userAddress, setUserAddress] = useState(
     localStorage.getItem("userAddress")
   );
+
+  useEffect(() => {
+    async function checkUserAddress() {
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+      if (accounts.length == 0) {
+        localStorage.setItem("userAddress", "");
+        console.log("no more accounts");
+      }
+      console.log("checking: ", accounts);
+    }
+    checkUserAddress();
+  });
 
   function toggleModal() {
     setShowModal(!showModal);
@@ -80,7 +94,7 @@ function DApp() {
         setUserAddress={setUserAddressFull}
       />
 
-      <div className="DApp-body p-4">
+      <div className="DApp-body mt-4">
         <Outlet />
 
         {/* <img src={logo} className="DApp-logo my-5" alt="logo" />

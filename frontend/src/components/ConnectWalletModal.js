@@ -143,6 +143,8 @@ export default function ConnectWalletModal(props) {
     </>
   );
 
+  console.log("Network error: ", networkError);
+
   return (
     <div
       className="wallet-modal"
@@ -151,7 +153,7 @@ export default function ConnectWalletModal(props) {
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
+        <div className="modal-content modal-rounder">
           <div className="modal-header justify-content-center">
             <h5 className="modal-title fw-600">Connect wallet</h5>
           </div>
@@ -161,7 +163,7 @@ export default function ConnectWalletModal(props) {
           <button
             type="button"
             className="btn-close btn-modal-close"
-            onClick={() => setTimeout(toggleModal, 200)}
+            onClick={toggleModal}
             aria-label="Close"
           ></button>
         </div>
