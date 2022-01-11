@@ -59,7 +59,7 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
             currId++;
             timestamp = _timestamps[currId];
             console.log("burned token at id: ");
-            console.log("currId");
+            console.log(currId);
         }
         _zerothTokenId = currId;
     }

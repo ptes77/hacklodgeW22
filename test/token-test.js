@@ -95,6 +95,13 @@ describe("RVotes Token", function () {
         });
     });
 
+    describe("awardRep", function() {
+        it("Should be able to award 10 reputation to address1", async function() {
+            const minty = await nft.awardReputation(addr1.address);
+            expect(await nft.balanceOf(addr1.address)).to.equal(10);
+        });
+    });
+
     
     
     // testing out scopes n
