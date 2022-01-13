@@ -1,9 +1,18 @@
 import ConnectWalletModal from "./components/ConnectWalletModal.js";
 import Header from "./components/Header.js";
+import WalletInfo from "./components/WalletInfo.js"; // ez: wallet stuff
 import { useState } from "react";
 import "./DApp.css";
-import { ethers } from "ethers";
+import { ethers, Wallet } from "ethers";
 import { Outlet } from "react-router-dom";
+
+// ez: contract imports
+import RVotesArtifact from "./contracts/RVotes.json";
+import contractAddress from "./contracts/contract-address.json";
+const ROPSTEN_NETWORK_ID = '3';
+const HARDHAT_NETWORK_ID = '31337';
+const ERROR_CODE_TX_REJECTED_BY_USER = 4001
+
 
 function DApp() {
   const [showModal, setShowModal] = useState(false);
@@ -42,11 +51,16 @@ function DApp() {
         </div>
       </div>
     );
-  }
+  };
 
+  // ez: initializing ethers
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-
+  const signer = provider.getSigner(0); //ez: set this to 0 for metamask
+  const _nft = new ethers.Contract(
+    contractAddress.Token, 
+    RVotesArtifact.abi
+  )
+  
   async function getBlockNumber() {
     return await provider.getBlockNumber();
   }
@@ -55,6 +69,14 @@ function DApp() {
     const balance = await provider.getBalance(userAddress);
     return ethers.utils.formatEther(balance.toHexString());
   }
+
+  async function _getUserBalance() {
+    var nfts = 0;
+    const balance = await this._nft.balanceOf(this.state.selectedAddress);
+    this.setState({ userNFTs: [...nfts] })
+  }
+
+
 
   stuff()
     .then((data) => {
@@ -74,6 +96,8 @@ function DApp() {
       />
 
       <div className="DApp-body p-4">
+         
+    <WalletInfo/>
         <Outlet />
 
         {/* <img src={logo} className="DApp-logo my-5" alt="logo" />
@@ -106,6 +130,7 @@ function DApp() {
           setUserAddress={setUserAddress}
         />
       )}
+     
     </div>
   );
 }

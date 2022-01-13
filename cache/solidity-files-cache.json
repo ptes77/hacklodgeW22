@@ -146,8 +146,8 @@
       ]
     },
     "/home/eilleen/coding/hacklodgeW22/contracts/RVotes.sol": {
-      "lastModificationDate": 1641854645561,
-      "contentHash": "f0ef5fc5942d59c2c5893ad39ebddf7e",
+      "lastModificationDate": 1642099569494,
+      "contentHash": "5b9891d4af4e016ed4254fad61253186",
       "sourceName": "contracts/RVotes.sol",
       "solcConfig": {
         "version": "0.8.4",

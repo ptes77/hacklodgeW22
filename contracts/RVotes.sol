@@ -14,11 +14,11 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
     using Counters for Counters.Counter;
 
     // Token timestamp
-    uint private _timestamp; // ez: later switch to Token objects
+    uint256 private _timestamp; // ez: later switch to Token objects
 
     // Mapping from token ID to timestamps
-    mapping(uint256 => uint) private _timestamps;
-    uint256 private _zerothTokenId = 0; 
+    mapping(uint256 => uint256) private _timestamps;
+    uint256 private _zerothTokenId = 0;
     uint256 private _highestId = 0;
 
     Counters.Counter private _tokenIdCounter;
@@ -44,16 +44,16 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
     }
 
     function expireTokens() public onlyOwner {
-        uint tendays = 864000;
+        uint256 tendays = 864000;
         _expireTokens(tendays);
     }
 
-    function _expireTokens(uint timeElapsed) public onlyOwner {
+    function _expireTokens(uint256 timeElapsed) public onlyOwner {
         // ez: burns ALL the tokens that have a timestamp greater than 10 days ago
         // ez: prolly very inefficient XD
         uint256 currId = _zerothTokenId;
-        uint thresholdTimestamp = block.timestamp - timeElapsed;
-        uint timestamp = _timestamps[currId];
+        uint256 thresholdTimestamp = block.timestamp - timeElapsed;
+        uint256 timestamp = _timestamps[currId];
         while (timestamp < thresholdTimestamp && currId <= _highestId - 1) {
             _burn(currId);
             currId++;
@@ -69,9 +69,9 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
         _awardReputation(to, 10);
     }
 
-    function _awardReputation(address to, uint amount) public onlyOwner {
+    function _awardReputation(address to, uint256 amount) public {
         require(amount <= 30, "Reputation amount is too high xd");
-        for (uint i=0; i<amount; i++){
+        for (uint256 i = 0; i < amount; i++) {
             safeMint(to);
         }
     }
@@ -85,11 +85,11 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
 
     // The following functions are overrides required by Solidity.
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        whenNotPaused
-        override(ERC721, ERC721Enumerable)
-    {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) whenNotPaused {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -102,12 +102,10 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
         return super.supportsInterface(interfaceId);
     }
 
-
     // Functions for eilleen for testing:
-    function getTimestamp(uint256 tokenId) public view returns (uint) {
+    function getTimestamp(uint256 tokenId) public view returns (uint256) {
         return (_timestamps[tokenId]);
     }
 
     // ez: 721 already has function ownerOf
-    
 }
