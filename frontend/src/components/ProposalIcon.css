@@ -1,27 +1,25 @@
-.proposal {
+.proposal-icon {
   border: 1px solid var(--bs-gray-300);
   border-radius: 8px;
+  overflow: hidden;
 }
 
-.proposal:hover {
+.proposal-icon:hover {
   border: 1px solid var(--bs-dark);
 }
 
-.proposal-title {
+.proposal-icon-title {
   font-size: 24px;
   font-weight: 700;
 }
 
-.proposal-body {
+.proposal-icon-body {
   font-size: 16px;
-}
-
-.proposal-link {
-  text-decoration: none;
 }
 
 a {
   color: black;
+  text-decoration: none;
 }
 
 a:hover {

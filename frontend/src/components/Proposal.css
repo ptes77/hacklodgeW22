@@ -1,0 +1,55 @@
+.vote-box {
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 36px;
+}
+
+.vote-title {
+  padding-bottom: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.vote-option-list {
+  margin-top: 12px;
+}
+
+.vote-option {
+  margin-bottom: 12px;
+  border-radius: 19px !important;
+  font-weight: 600;
+}
+
+.vote-option:focus {
+  color: white !important;
+}
+
+.btn-vote-submit {
+  border-radius: 19px;
+  font-weight: 600;
+}
+
+.vote-ui {
+  max-width: 960px;
+}
+
+.user-info-a {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bs-gray-600);
+  margin-bottom: 4px;
+}
+
+.user-info-b {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bs-dark);
+  margin-bottom: 4px;
+}
+
+.proposal-title {
+  margin-bottom: 12px;
+}

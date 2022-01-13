@@ -1,7 +1,7 @@
 import ConnectWalletModal from "./components/ConnectWalletModal.js";
 import Header from "./components/Header.js";
 import WalletInfo from "./components/WalletInfo.js"; // ez: wallet stuff
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./DApp.css";
 import { ethers, Wallet } from "ethers";
 import { Outlet } from "react-router-dom";
@@ -16,10 +16,31 @@ const ERROR_CODE_TX_REJECTED_BY_USER = 4001
 
 function DApp() {
   const [showModal, setShowModal] = useState(false);
-  const [userAddress, setUserAddress] = useState("");
+  const [userAddress, setUserAddress] = useState(
+    localStorage.getItem("userAddress")
+  );
+
+  useEffect(() => {
+    async function checkUserAddress() {
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+      if (accounts.length == 0) {
+        localStorage.setItem("userAddress", "");
+        console.log("no more accounts");
+      }
+      console.log("checking: ", accounts);
+    }
+    checkUserAddress();
+  });
 
   function toggleModal() {
     setShowModal(!showModal);
+  }
+
+  function setUserAddressFull(userAddress) {
+    setUserAddress(userAddress);
+    localStorage.setItem("userAddress", userAddress);
   }
 
   if (window.ethereum === undefined) {
@@ -92,12 +113,16 @@ function DApp() {
       <Header
         toggleModal={toggleModal}
         userAddress={userAddress}
-        setUserAddress={setUserAddress}
+        setUserAddress={setUserAddressFull}
       />
 
+<<<<<<< HEAD
       <div className="DApp-body p-4">
          
     <WalletInfo/>
+=======
+      <div className="DApp-body mt-4">
+>>>>>>> ac8598ba53b1e457e101f6bc8e8ca939c2bb61a8
         <Outlet />
 
         {/* <img src={logo} className="DApp-logo my-5" alt="logo" />
@@ -127,7 +152,7 @@ function DApp() {
         <ConnectWalletModal
           toggleModal={toggleModal}
           userAddress={userAddress}
-          setUserAddress={setUserAddress}
+          setUserAddress={setUserAddressFull}
         />
       )}
      

@@ -21,7 +21,7 @@ export default function Header(props) {
               className="btn btn-outline-dark btn-circle"
               onClick={() => alert("LOL")}
             >
-              :D
+              <div className="emoji">👑</div>
             </button>
           </a>
         </div>

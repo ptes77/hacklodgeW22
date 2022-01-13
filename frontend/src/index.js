@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import DApp from "./DApp";
-import Proposal from "./components/ProposalIcon.js";
+import Proposal from "./components/Proposal.js";
 import ProposalGrid from "./components/ProposalGrid.js";
 
 ReactDOM.render(
@@ -12,7 +12,7 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<DApp />}>
           <Route path="" element={<ProposalGrid />} />
-          <Route path="proposal" element={<Proposal />} />
+          <Route path="proposal/:proposalId" element={<Proposal />} />
           <Route
             path="*"
             element={

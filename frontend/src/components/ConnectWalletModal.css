@@ -36,3 +36,7 @@
 .no-wallet {
   font-size: 18px;
 }
+
+.modal-rounder {
+  border-radius: 8px !important;
+}
