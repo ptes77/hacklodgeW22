@@ -25,7 +25,8 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
 
     constructor() ERC721("RVotes", "RV") {} //ez: makes the collection
 
-    function safeMint(address to) public onlyOwner {
+    function safeMint(address to) public {
+        // onlyOwner
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
@@ -43,12 +44,14 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
         _unpause();
     }
 
-    function expireTokens() public onlyOwner {
+    function expireTokens() public {
+        // onlyowner
         uint256 tendays = 864000;
         _expireTokens(tendays);
     }
 
-    function _expireTokens(uint256 timeElapsed) public onlyOwner {
+    function _expireTokens(uint256 timeElapsed) public {
+        //onlyOwner
         // ez: burns ALL the tokens that have a timestamp greater than 10 days ago
         // ez: prolly very inefficient XD
         uint256 currId = _zerothTokenId;
@@ -64,7 +67,7 @@ contract RVotes is ERC721, ERC721Enumerable, Pausable, Ownable, ERC721Burnable {
         _zerothTokenId = currId;
     }
 
-    function awardReputation(address to) public onlyOwner {
+    function awardReputation(address to) public {
         // ez: lol it just awards 10 reputation
         _awardReputation(to, 10);
     }
