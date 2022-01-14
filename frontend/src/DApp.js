@@ -8,7 +8,9 @@ import { Outlet } from "react-router-dom";
 
 // ez: contract imports
 import RVotesArtifact from "./contracts/RVotes.json";
-import contractAddress from "./contracts/contract-address.json";
+import RVotesContractAddress from "./contracts/contract-address.json";
+import VotingArtifact from "./contracts/Voting.json";
+import VotingContractAddress from "./contracts/contract-address-voting.json";
 const ROPSTEN_NETWORK_ID = "3";
 const HARDHAT_NETWORK_ID = "31337";
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
@@ -77,7 +79,14 @@ function DApp() {
   // ez: initializing ethers
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner(0); //ez: set this to 0 for metamask
-  const _nft = new ethers.Contract(contractAddress.Token, RVotesArtifact.abi);
+  const _nft = new ethers.Contract( // ez: call _nft.<function_name>([]) for token methods
+    RVotesContractAddress.Token,
+    RVotesArtifact.abi
+  );
+  const _votingLogic = new ethers.Contract( // ez: call _votingLogic.<function_name>([]) for voting methods
+    VotingContractAddress.Token,
+    VotingArtifact.abi
+  );
 
   async function getBlockNumber() {
     return await provider.getBlockNumber();
