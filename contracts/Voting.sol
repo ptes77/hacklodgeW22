@@ -33,10 +33,10 @@ contract Voting {
 
     constructor() {
         nextTopicNumber = 0;
-        RVotesAddr = 0x0cb10Ea436bc0BBce30fB9b6c540a102a2c6855d; // deployed 1:25pm 1/13/22
+        RVotesAddr = 0x9d83e140330758a8fFD07F8Bd73e86ebcA8a5692; // deployed 5:12pm 1/13/22
     }
 
-    function setState(uint256 topic_id) private {
+    function setState(uint256 topic_id) public {
         require(topic_id < nextTopicNumber, "Invalid topic id passed in");
         Topic storage topic = topics[topic_id];
         if (topic.state == State.Canceled) {
@@ -48,13 +48,25 @@ contract Voting {
         }
     }
 
+    function getState(uint256 topic_id) public view returns(string memory) {
+        require(topic_id < nextTopicNumber, "Invalid topic id passed in");
+        Topic storage topic = topics[topic_id];
+        if(topic.state == State.Running) {
+            return ("Running");
+        } else if(topic.state == State.Completed) {
+            return ("Completed");
+        } else {
+            return ("Canceled");
+        }
+    }
+
     function createTopic(
         string memory _prompt,
         uint256 _numOptions,
         uint256 _votingDuration
     ) public {
         // check address is member of DAO
-        require(IRVotes(RVotesAddr).isOwner(msg.sender));
+        require(IRVotes(RVotesAddr).isOwner(msg.sender), "You are not a member of the DAO");
         Topic storage topic = topics[nextTopicNumber];
         topic.prompt = _prompt;
         topic.numOptions = _numOptions;
