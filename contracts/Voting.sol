@@ -34,8 +34,7 @@ contract Voting {
 
     constructor() {
         nextTopicNumber = 0;
-        RVotesAddr = 0xDA0bab807633f07f013f94DD0E6A4F96F8742B53; // deployed 1:25pm 1/13/22
-        // at the moment on ropsten: 0x0cb10Ea436bc0BBce30fB9b6c540a102a2c6855d, deployed 1:25pm 1/13/22
+        RVotesAddr = 0x0cb10Ea436bc0BBce30fB9b6c540a102a2c6855d; // deployed 1:25pm 1/13/22
     }
 
     function setState(uint256 topic_id) public {
