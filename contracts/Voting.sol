@@ -25,6 +25,7 @@ contract Voting {
         address[] voters;
         mapping(address => uint256) votes;
         mapping(uint256 => uint256) tallies;
+        bool distributed;
     }
 
     mapping(uint256 => Topic) public topics;
@@ -33,10 +34,11 @@ contract Voting {
 
     constructor() {
         nextTopicNumber = 0;
-        RVotesAddr = 0x0cb10Ea436bc0BBce30fB9b6c540a102a2c6855d; // deployed 1:25pm 1/13/22
+        RVotesAddr = 0xDA0bab807633f07f013f94DD0E6A4F96F8742B53; // deployed 1:25pm 1/13/22
+        // at the moment on ropsten: 0x0cb10Ea436bc0BBce30fB9b6c540a102a2c6855d, deployed 1:25pm 1/13/22
     }
 
-    function setState(uint256 topic_id) private {
+    function setState(uint256 topic_id) public {
         require(topic_id < nextTopicNumber, "Invalid topic id passed in");
         Topic storage topic = topics[topic_id];
         if (topic.state == State.Canceled) {
@@ -48,19 +50,32 @@ contract Voting {
         }
     }
 
+    function getState(uint256 topic_id) public view returns(string memory) {
+        require(topic_id < nextTopicNumber, "Invalid topic id passed in");
+        Topic storage topic = topics[topic_id];
+        if(topic.state == State.Running) {
+            return ("Running");
+        } else if(topic.state == State.Completed) {
+            return ("Completed");
+        } else {
+            return ("Canceled");
+        }
+    }
+
     function createTopic(
         string memory _prompt,
         uint256 _numOptions,
         uint256 _votingDuration
     ) public {
         // check address is member of DAO
-        require(IRVotes(RVotesAddr).isOwner(msg.sender));
+        require(IRVotes(RVotesAddr).isOwner(msg.sender), "You are not a member of the DAO");
         Topic storage topic = topics[nextTopicNumber];
         topic.prompt = _prompt;
         topic.numOptions = _numOptions;
         topic.proposer = msg.sender;
         topic.endBlock = block.number + _votingDuration / 15;
         topic.state = State.Running;
+        topic.distributed = false;
         nextTopicNumber++;
     }
 
@@ -83,7 +98,7 @@ contract Voting {
         require(topic.votes[msg.sender] == 0, "You have already voted");
         topic.votes[msg.sender] = optionNo;
         topic.voters.push(msg.sender);
-        topic.tallies[optionNo] += 1;
+        topic.tallies[optionNo] += balanceOf(msg.sender); // weighted voting
 
         return true;
     }
@@ -108,6 +123,7 @@ contract Voting {
     function distributeReputation(uint256 topic_id) public returns (bool) {
         uint256 winner = getWinningOption(topic_id);
         Topic storage topic = topics[topic_id];
+        require(!topic.distributed, "Vote funds have already been distributed");
         for (uint256 i = 0; i < topic.voters.length; i++) {
             address currentVoter = topic.voters[i];
             uint256 currentVote = topic.votes[currentVoter];
@@ -115,6 +131,7 @@ contract Voting {
                 IRVotes(RVotesAddr).awardReputation(currentVoter);
             }
         }
+        topic.distributed = true;
         return true;
     }
 
