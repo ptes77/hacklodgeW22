@@ -5,10 +5,14 @@
   padding-left: 24px;
   padding-right: 24px;
   padding-bottom: 36px;
+  border-radius: 8px;
+  position: fixed;
+  width: 300px;
 }
 
 .vote-title {
-  padding-bottom: 12px;
+  padding-top: 4px;
+  padding-bottom: 16px;
   font-size: 1.5rem;
   font-weight: 600;
 }
@@ -52,4 +56,19 @@
 
 .proposal-title {
   margin-bottom: 12px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.proposal-body {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bs-gray-600);
+}
+
+.proposal-author {
+  font-size: 16px;
+  color: var(--bs-gray-600);
+  margin-top: 8px;
+  margin-bottom: 0;
 }

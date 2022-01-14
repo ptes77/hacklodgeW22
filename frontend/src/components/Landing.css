@@ -1,0 +1,39 @@
+.landing {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  background: linear-gradient(to top right, white, var(--bs-gray-300));
+}
+
+.landing-title {
+  font-size: 96px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.landing-desc {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--bs-gray-600);
+}
+
+.btn-enter {
+  font-size: 18px;
+  font-weight: 600;
+  width: 160px;
+  height: 40px;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px white;
+  }
+  to {
+    text-shadow: 0 0 80px var(--bs-gray-300), 0 0 50px var(--bs-gray-400);
+  }
+}

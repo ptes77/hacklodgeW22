@@ -7,7 +7,7 @@ export default function Header(props) {
     <nav className="border-bottom fixed-top">
       <div className="px-4 mx-auto header">
         <div className="logo">
-          <a href="/">sorry</a>
+          <a href="/">snapglass</a>
         </div>
         <div className="profile">
           <ConnectWalletButton {...props} />

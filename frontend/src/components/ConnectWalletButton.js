@@ -13,7 +13,7 @@ export default function CollectWalletButton(props) {
     <>
       <button
         type="button"
-        className="btn btn-outline-primary btn-connect"
+        className="btn btn-outline-dark btn-connect"
         onClick={toggleModal}
       >
         {userAddress ? shortenAddress(userAddress) : "connect me"}

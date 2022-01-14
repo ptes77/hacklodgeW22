@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const HARDHAT_NETWORK_ID = "31337";
 
 export default function ConnectWalletModal(props) {
-  const { toggleModal, userAddress, setUserAddress } = props;
+  const { toggleModal, userAddress, setUserAddress, network } = props;
   const [networkError, setNetworkError] = useState("");
   const [connectingWallet, setConnectingWallet] = useState(false);
 
@@ -79,67 +79,83 @@ export default function ConnectWalletModal(props) {
   }
 
   const unconnectedBody = (
-    <a>
+    <button
+      type="button"
+      className="btn btn-wallet-opt"
+      onClick={() => {
+        _connectWallet();
+        toggleModal();
+      }}
+    >
+      <img
+        src="https://raw.githubusercontent.com/snapshot-labs/lock/master/connectors/assets/metamask.png"
+        height="28"
+        width="28"
+        className="mx-2 mt-1 mb-2"
+        alt="MetaMask"
+      />
+      Metamask
+    </button>
+  );
+
+  let etherscanAddress = "";
+  switch (network) {
+    case "homestead":
+      etherscanAddress = "https://www.etherscan.io/address/" + userAddress;
+      break;
+    case "unknown":
+      etherscanAddress = "";
+      break;
+    default:
+      etherscanAddress =
+        "https://" + network + ".etherscan.io/address/" + userAddress;
+  }
+
+  const connectedBody = (
+    <>
+      {network === "unknown" ? (
+        <button
+          type="button"
+          className="btn btn-wallet-opt"
+          onClick={() => {
+            toggleModal();
+          }}
+          disabled={true}
+        >
+          {shortenAddress(userAddress)}
+        </button>
+      ) : (
+        <a href={etherscanAddress} target="_blank" rel="noopener noreferrer">
+          <button
+            type="button"
+            className="btn btn-wallet-opt"
+            onClick={() => {
+              toggleModal();
+            }}
+          >
+            {shortenAddress(userAddress)}
+          </button>
+        </a>
+      )}
       <button
         type="button"
         className="btn btn-wallet-opt"
         onClick={() => {
-          _connectWallet();
+          setConnectingWallet(true);
+        }}
+      >
+        Connect Wallet
+      </button>
+      <button
+        type="button"
+        className="btn btn-wallet-opt"
+        onClick={() => {
+          _resetState();
           toggleModal();
         }}
       >
-        <img
-          src="https://raw.githubusercontent.com/snapshot-labs/lock/master/connectors/assets/metamask.png"
-          height="28"
-          width="28"
-          className="mx-2 mt-1 mb-2"
-          alt="MetaMask"
-        />
-        Metamask
+        <span className="text-danger">Logout</span>
       </button>
-    </a>
-  );
-
-  const connectedBody = (
-    <>
-      <a
-        href={"https://www.etherscan.io/address/" + userAddress}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <button
-          type="button"
-          className="btn btn-wallet-opt"
-          onClick={() => {
-            toggleModal();
-          }}
-        >
-          {shortenAddress(userAddress)}
-        </button>
-      </a>
-      <a>
-        <button
-          type="button"
-          className="btn btn-wallet-opt"
-          onClick={() => {
-            setConnectingWallet(true);
-          }}
-        >
-          Connect Wallet
-        </button>
-      </a>
-      <a>
-        <button
-          type="button"
-          className="btn btn-wallet-opt"
-          onClick={() => {
-            _resetState();
-            toggleModal();
-          }}
-        >
-          <span className="text-danger">Logout</span>
-        </button>
-      </a>
     </>
   );
 

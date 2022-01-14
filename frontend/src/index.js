@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import DApp from "./DApp";
+import Landing from "./components/Landing.js";
 import Proposal from "./components/Proposal.js";
 import ProposalGrid from "./components/ProposalGrid.js";
 
@@ -10,8 +11,9 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DApp />}>
-          <Route path="" element={<ProposalGrid />} />
+        <Route exact path="" element={<Landing />} />
+        <Route path="/a" element={<DApp />}>
+          <Route path="proposal" element={<ProposalGrid />} />
           <Route path="proposal/:proposalId" element={<Proposal />} />
           <Route
             path="*"
