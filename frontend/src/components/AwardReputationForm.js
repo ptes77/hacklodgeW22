@@ -24,7 +24,7 @@ export function AwardReputationForm({ awardRep }) {
           <input
             className="btn btn-primary"
             type="submit"
-            value="Get Reputation"
+            value="Click to distribute reputation"
           />
         </div>
       </form>

@@ -26,9 +26,11 @@ contract Voting {
         mapping(address => uint256) votes;
         mapping(uint256 => uint256) tallies;
         bool distributed;
+        string ipfsHash;
     }
 
     mapping(uint256 => Topic) public topics;
+    mapping(uint256 => string) public hashFromTopicNum;
     uint256 public nextTopicNumber;
     address public RVotesAddr;
 
@@ -80,6 +82,14 @@ contract Voting {
         topic.state = State.Running;
         topic.distributed = false;
         nextTopicNumber++;
+    }
+
+    function addIPFStoMapping(string memory ipfsHash, uint256 topicNumber)
+        public
+    {
+        Topic storage topic = topics[topicNumber];
+        topic.ipfsHash = ipfsHash;
+        hashFromTopicNum[topicNumber] = ipfsHash;
     }
 
     function vote(uint256 topic_id, uint256 optionNo) public returns (bool) {

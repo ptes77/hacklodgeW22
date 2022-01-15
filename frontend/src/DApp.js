@@ -13,6 +13,7 @@ import RVotesArtifact from "./contracts/RVotes.json";
 import RVotesContractAddress from "./contracts/contract-address.json";
 import VotingArtifact from "./contracts/Voting.json";
 import VotingContractAddress from "./contracts/contract-address-voting.json";
+import { Button } from "react-bootstrap";
 const ROPSTEN_NETWORK_ID = "3";
 const HARDHAT_NETWORK_ID = "31337";
 const ERROR_CODE_TX_REJECTED_BY_USER = 4001;
@@ -24,7 +25,8 @@ function DApp() {
   );
   const [network, setNetwork] = useState("");
   // ez: chain state stuff
-  const [userNFTs, setUserNFTs] = useState(0);
+  const [userNFTs, setUserNFTs] = useState("press update");
+
   const [nftData, setNftData] = useState(undefined);
   const [message, setMessage] = useState("");
   const [txBeingSent, setTxBeingSent] = useState("");
@@ -99,7 +101,8 @@ function DApp() {
 
   async function _getUserBalance() {
     const balance = await _nft.balanceOf(userAddress);
-    setUserNFTs(balance);
+
+    setUserNFTs(parseInt(balance._hex, 16));
   }
 
   async function _awardRep(to) {
@@ -143,9 +146,6 @@ function DApp() {
       />
 
       <div className="DApp-body p-4 mx-auto">
-        <AwardReputationForm awardRep={(to) => _awardRep(to)} />
-        <BurnTokensButton burnTokens={() => _burnTokens()} />
-        {/* <WalletInfo dataFromParent={chainState} /> */}
         <Outlet />
       </div>
       {showModal && (
@@ -156,6 +156,13 @@ function DApp() {
           network={network}
         />
       )}
+      <div className="DApp-body p-4 mx-auto">
+        <AwardReputationForm awardRep={(to) => _awardRep(to)} />
+        <BurnTokensButton burnTokens={() => _burnTokens()} />
+        <WalletInfo dataFromParent={userNFTs} />
+        <p>Current wallet: {userAddress}</p>
+        <Button onClick={() => _getUserBalance()}>Update Balance</Button>
+      </div>
     </div>
   );
 }
