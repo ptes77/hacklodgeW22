@@ -168,7 +168,7 @@ function DApp() {
         setUserAddress={setUserAddressFull}
       />
 
-      <div className="DApp-body p-4">
+      <div className="DApp-body p-4 mx-auto">
         <WalletInfo />
 
         <AwardReputationForm awardRep={(to) => this._awardRep(to)} />
