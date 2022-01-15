@@ -87,7 +87,7 @@ export default function ProposalGrid() {
         {[...Array(11).keys()].map((i) => {
           return (
             <Link to={`/a/proposal/${i}`} key={i}>
-              <ProposalIcon title="Placement title" img={steve} body={body} />
+              <ProposalIcon title={"Proposal " + i} body={body} />
             </Link>
           );
         })}
