@@ -5,21 +5,61 @@ import Button from "react-bootstrap/Button";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import { Link, useParams } from "react-router-dom";
+import { ethers, BigNumber } from "ethers";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import RVotesArtifact from "../contracts/RVotes.json";
+import RVotesContractAddress from "../contracts/contract-address.json";
+import VotingArtifact from "../contracts/Voting.json";
+import VotingContractAddress from "../contracts/contract-address-voting.json";
+
 export default function Proposal() {
-  const [voteValue, setVoteValue] = useState("");
+  const [voteValue, setVoteValue] = useState(0);
+  const [balance, setBalance] = useState(BigNumber.from(0));
   const params = useParams();
+
+  // Initialize ethers
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner(0); //ez: set this to 0 for metamask
+  const _nft = new ethers.Contract( // ez: call _nft.<function_name>([]) for token methods
+    RVotesContractAddress.Token,
+    RVotesArtifact.abi,
+    signer
+  );
+  const _votingLogic = new ethers.Contract( // ez: call _votingLogic.<function_name>([]) for voting
+    VotingContractAddress.Token,
+    VotingArtifact.abi,
+    signer
+  );
+
+  let userAddress = localStorage.getItem("userAddress");
+
+  useEffect(() => {
+    async function _getUserBalance() {
+      setBalance(await _nft.balanceOf(userAddress));
+    }
+    userAddress = localStorage.getItem("userAddress");
+    _getUserBalance();
+  }, [userAddress]);
 
   function shortenAddress(addr) {
     return addr.slice(0, 6) + "..." + addr.slice(-4);
   }
 
-  let userAddress = localStorage.getItem("userAddress");
+  function submitVote() {
+    if ([1, 2, 3].includes(voteValue)) {
+      _votingLogic.vote(params.proposalId, voteValue);
+    } else {
+      console.error("Invalide vote value!");
+    }
+  }
 
-  useEffect(() => {
-    userAddress = localStorage.getItem("userAddress");
-  });
+  // async function _getUserBalance() {
+  //   setBalance(await _nft.balanceOf(userAddress));
+  // }
+
+  // _getUserBalance(userAddress);
+  console.log("balance:", balance);
 
   return (
     <div className="container vote-ui">
@@ -90,7 +130,9 @@ export default function Proposal() {
               </div>
               <div className="d-flex justify-content-between">
                 <p className="user-info-a">Your Voting Power:</p>
-                <p className="user-info-b">900 AVRY</p>
+                <p className="user-info-b">
+                  {ethers.utils.formatUnits(balance._hex, 0)} AVRY
+                </p>
               </div>
               <div className="d-flex justify-content-between">
                 <p className="user-info-a">Proposal</p>
@@ -118,7 +160,7 @@ export default function Proposal() {
                 variant="outline-primary"
                 className="vote-option"
                 id="tbg-radio-1"
-                value="Yes"
+                value={1}
               >
                 Yes
               </ToggleButton>
@@ -126,7 +168,7 @@ export default function Proposal() {
                 variant="outline-danger"
                 className="vote-option"
                 id="tbg-radio-2"
-                value="No"
+                value={2}
               >
                 No
               </ToggleButton>
@@ -134,7 +176,7 @@ export default function Proposal() {
                 variant="outline-secondary"
                 className="vote-option"
                 id="tbg-radio-3"
-                value="Abstain"
+                value={3}
               >
                 Abstain
               </ToggleButton>
@@ -142,7 +184,7 @@ export default function Proposal() {
             <Button
               variant="success"
               className="btn-vote-submit"
-              onClick={() => alert("You voted: " + voteValue)}
+              onClick={submitVote}
               disabled={voteValue === "" || !userAddress}
             >
               Vote

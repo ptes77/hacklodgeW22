@@ -143,10 +143,10 @@ function DApp() {
       />
 
       <div className="DApp-body p-4 mx-auto">
+        <Outlet />
         <AwardReputationForm awardRep={(to) => _awardRep(to)} />
         <BurnTokensButton burnTokens={() => _burnTokens()} />
         {/* <WalletInfo dataFromParent={chainState} /> */}
-        <Outlet />
       </div>
       {showModal && (
         <ConnectWalletModal
