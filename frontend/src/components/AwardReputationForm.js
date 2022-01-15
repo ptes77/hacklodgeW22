@@ -3,11 +3,9 @@ import React from "react";
 export function AwardReputationForm({ awardRep }) {
   return (
     <div>
-      <h4>Award Reputation</h4>
+      <h4>Award Reputation: </h4>
       <form
         onSubmit={(event) => {
-          // This function just calls the mintNFT callback with the
-          // form's data.
           event.preventDefault();
 
           const formData = new FormData(event.target);

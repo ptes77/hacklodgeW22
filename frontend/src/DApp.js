@@ -2,6 +2,7 @@ import ConnectWalletModal from "./components/ConnectWalletModal.js";
 import Header from "./components/Header.js";
 import WalletInfo from "./components/WalletInfo.js"; // ez: wallet stuff
 import { AwardReputationForm } from "./components/AwardReputationForm";
+import { BurnTokensButton } from "./components/BurnTokensButton.js";
 import { useEffect, useState } from "react";
 import "./DApp.css";
 import { ethers, Wallet } from "ethers";
@@ -111,8 +112,8 @@ function DApp() {
   } // ez: awardRep function
 
   async function _burnTokens(time) {
-    this._sendTransaction(this._nft._expireTokens, [20]);
-    console.log("sent transaction _burnTokens");
+    this._sendTransaction(this._nft._expireTokens, [60]);
+    console.log("sent transaction _burnTokens, 60s");
   }
   async function _pullRecentPrompt() {
     let sendPromise = this._sendTransaction(
@@ -151,6 +152,16 @@ function DApp() {
     return error.message;
   }
 
+  // ez: chain state stuff
+  var chainState = {
+    userNFTs: [],
+    nftData: undefined,
+    selectedAddress: undefined,
+  };
+  function setChainState(childData) {
+    this.setState({ message: childData });
+  }
+
   stuff()
     .then((data) => {
       console.log("testing: ", data);
@@ -169,9 +180,9 @@ function DApp() {
       />
 
       <div className="DApp-body p-4 mx-auto">
-        <WalletInfo />
-
         <AwardReputationForm awardRep={(to) => this._awardRep(to)} />
+        <BurnTokensButton burnTokens={() => this._burnTokens()} />
+        {/* <WalletInfo dataFromParent={chainState} /> */}
         <Outlet />
       </div>
       {showModal && (
