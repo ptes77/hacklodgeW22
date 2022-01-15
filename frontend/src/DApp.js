@@ -144,13 +144,6 @@ function DApp() {
         userAddress={userAddress}
         setUserAddress={setUserAddressFull}
       />
-
-      <div className="DApp-body p-4 mx-auto">
-        <Outlet />
-        <AwardReputationForm awardRep={(to) => _awardRep(to)} />
-        <BurnTokensButton burnTokens={() => _burnTokens()} />
-        {/* <WalletInfo dataFromParent={chainState} /> */}
-      </div>
       {showModal && (
         <ConnectWalletModal
           toggleModal={toggleModal}
@@ -160,6 +153,7 @@ function DApp() {
         />
       )}
       <div className="DApp-body p-4 mx-auto">
+        <Outlet />
         <AwardReputationForm awardRep={(to) => _awardRep(to)} />
         <BurnTokensButton burnTokens={() => _burnTokens()} />
         <WalletInfo dataFromParent={userNFTs} />
