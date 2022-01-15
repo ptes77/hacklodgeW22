@@ -1,0 +1,31 @@
+.modal-rounder {
+  border-radius: 8px !important;
+}
+
+.proposal-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0, 0.4);
+}
+
+.btn-modal-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 20px !important;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.modal-body div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 18px;
+  font-weight: 600;
+}
