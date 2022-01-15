@@ -1,34 +1,32 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
-export default function WalletInfo({ balanceOf }) {
-  //const [answer, setAnswer] = useState('');
-  // function handleTextareaChange(e) {
-  //   setAnswer(e.target.value);
-  // }
-  const [balance, setBalance] = useState(0);
+import React from "react";
 
+export function AwardReputationForm({ awardRep }) {
   return (
-    <div className="grid gap-6 grid-cols-3 mx-auto mt-4">
+    <div>
+      <h4>Award Reputation</h4>
       <form
         onSubmit={(event) => {
+          // This function just calls the mintNFT callback with the
+          // form's data.
+          event.preventDefault();
+
           const formData = new FormData(event.target);
           const to = formData.get("to");
 
           if (to) {
-            const bal = balanceOf(to);
-            setBalance(bal);
+            awardRep(to);
           }
         }}
       >
         <div className="form-group">
-          <label>Address to check</label>
+          <label>Recipient address </label>
           <input className="form-control" type="text" name="to" required />
         </div>
         <div className="form-group">
           <input
             className="btn btn-primary"
             type="submit"
-            value="Check Balance"
+            value="Get Reputation"
           />
         </div>
       </form>

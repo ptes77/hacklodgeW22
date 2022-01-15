@@ -1,6 +1,7 @@
 import ConnectWalletModal from "./components/ConnectWalletModal.js";
 import Header from "./components/Header.js";
 import WalletInfo from "./components/WalletInfo.js"; // ez: wallet stuff
+import { AwardReputationForm } from "./components/AwardReputationForm";
 import { useEffect, useState } from "react";
 import "./DApp.css";
 import { ethers, Wallet } from "ethers";
@@ -83,7 +84,7 @@ function DApp() {
     RVotesContractAddress.Token,
     RVotesArtifact.abi
   );
-  const _votingLogic = new ethers.Contract( // ez: call _votingLogic.<function_name>([]) for voting methods
+  const _votingLogic = new ethers.Contract( // ez: call _votingLogic.<function_name>([]) for voting
     VotingContractAddress.Token,
     VotingArtifact.abi
   );
@@ -105,6 +106,51 @@ function DApp() {
     this.setState({ userNFTs: [...nfts] });
   }
 
+  async function _awardRep(to) {
+    this._sendTransaction(this._nft.awardReputation, [to]);
+  } // ez: awardRep function
+
+  async function _burnTokens(time) {
+    this._sendTransaction(this._nft._expireTokens, [20]);
+    console.log("sent transaction _burnTokens");
+  }
+  async function _pullRecentPrompt() {
+    let sendPromise = this._sendTransaction(
+      this._votingLogic.getRecentTopicPrompt,
+      []
+    );
+    console.log("pulled the most recent prompt from contract");
+  }
+
+  async function _sendTransaction(method, args) {
+    try {
+      const tx = await method.apply(null, args);
+      this.setState({ txBeingSent: tx.hash });
+
+      const receipt = await tx.wait();
+
+      if (receipt.status === 0) {
+        throw new Error("Transaction failed");
+      }
+    } catch (error) {
+      if (error.code === ERROR_CODE_TX_REJECTED_BY_USER) {
+        return;
+      }
+
+      console.error(error);
+    }
+  }
+
+  // This is an utility method that turns an RPC error into a human readable
+  // message.
+  function _getRpcErrorMessage(error) {
+    if (error.data) {
+      return error.data.message;
+    }
+
+    return error.message;
+  }
+
   stuff()
     .then((data) => {
       console.log("testing: ", data);
@@ -124,6 +170,8 @@ function DApp() {
 
       <div className="DApp-body p-4">
         <WalletInfo />
+
+        <AwardReputationForm awardRep={(to) => this._awardRep(to)} />
         <Outlet />
       </div>
       {showModal && (
