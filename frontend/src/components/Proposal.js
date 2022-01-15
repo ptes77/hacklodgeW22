@@ -131,7 +131,7 @@ export default function Proposal() {
               <div className="d-flex justify-content-between">
                 <p className="user-info-a">Your Voting Power:</p>
                 <p className="user-info-b">
-                  {ethers.utils.formatUnits(balance._hex, 0)} AVRY
+                  {ethers.utils.formatUnits(balance._hex, 0)} RV
                 </p>
               </div>
               <div className="d-flex justify-content-between">

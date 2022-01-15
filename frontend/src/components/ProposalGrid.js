@@ -8,12 +8,6 @@ import CreateProposalModal from "./CreateProposalModal";
 import * as ipfsAPI from "ipfs-http-client";
 import { BufferList } from "bl";
 
-const PROPOSAL_JSON = {
-  title: "title",
-  description: "description",
-  external_url: "https://hacklodge-w22.vercel.app/a/proposal/",
-};
-
 export default function ProposalGrid() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("sample title");
@@ -21,6 +15,7 @@ export default function ProposalGrid() {
   const [currTopicId, setCurrTopicId] = useState(0);
   const [propIdToHash, setPropIdToHash] = useState({});
   const [propHashToId, setPropHashToId] = useState({});
+  const [topics, setTopics] = useState({});
 
   function toggleModal() {
     setShowModal(!showModal);
@@ -43,15 +38,19 @@ export default function ProposalGrid() {
   }
 
   async function uploadProposalToIPFS() {
-    let proposal = PROPOSAL_JSON;
-    proposal.title = title;
-    proposal.description = desc;
-    proposal.external_url = proposal.external_url + currTopicId;
+    let proposal = {
+      title: title,
+      description: desc,
+      external_url:
+        "https://hacklodge-w22.vercel.app/a/proposal/" + currTopicId,
+    };
 
     console.log("Uploading proposal to IPFS...");
+    console.log("Proposal to be uploaded:", proposal);
     const uploadedProposal = await ipfs.add(JSON.stringify(proposal));
     console.log("uploaded proposal:", uploadedProposal);
 
+    // dang these don't work bc they get reset every time ;o
     setPropIdToHash({ ...propIdToHash, currTopicId: uploadedProposal });
     setPropHashToId({ ...propHashToId, uploadedProposal: currTopicId });
     return uploadedProposal;
@@ -65,9 +64,9 @@ export default function ProposalGrid() {
   //   uploadToIPFSasJSON().then((data) => console.log(data));
   // }, []);
 
-  getFromIPFS("QmSvz2GuKEYLvDt3RwQfBn9EaUbdceAXGdHq6LfabLJdQJ").then((data) =>
-    console.log("testing: ", data)
-  );
+  // getFromIPFS("QmSvz2GuKEYLvDt3RwQfBn9EaUbdceAXGdHq6LfabLJdQJ").then((data) =>
+  //   console.log("testing: ", data)
+  // );
 
   const body =
     "lorem ipsum I want a chicken sandwich and a 4-piece chicken strips";
@@ -103,6 +102,8 @@ export default function ProposalGrid() {
           currTopicId={currTopicId}
           setCurrTopicId={setCurrTopicId}
           uploadProposalToIPFS={uploadProposalToIPFS}
+          topics={topics}
+          setTopics={setTopics}
         />
       )}
     </>

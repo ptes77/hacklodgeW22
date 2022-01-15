@@ -99,6 +99,7 @@ export default function ConnectWalletModal(props) {
   );
 
   let etherscanAddress = "";
+  console.log("network: ", network);
   switch (network) {
     case "homestead":
       etherscanAddress = "https://www.etherscan.io/address/" + userAddress;
