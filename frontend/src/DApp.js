@@ -23,6 +23,11 @@ function DApp() {
     localStorage.getItem("userAddress")
   );
   const [network, setNetwork] = useState("");
+  // ez: chain state stuff
+  const [userNFTs, setUserNFTs] = useState(0);
+  const [nftData, setNftData] = useState(undefined);
+  const [message, setMessage] = useState("");
+  const [txBeingSent, setTxBeingSent] = useState("");
 
   useEffect(() => {
     async function checkUserAddress() {
@@ -83,50 +88,37 @@ function DApp() {
   const signer = provider.getSigner(0); //ez: set this to 0 for metamask
   const _nft = new ethers.Contract( // ez: call _nft.<function_name>([]) for token methods
     RVotesContractAddress.Token,
-    RVotesArtifact.abi
+    RVotesArtifact.abi,
+    signer
   );
   const _votingLogic = new ethers.Contract( // ez: call _votingLogic.<function_name>([]) for voting
     VotingContractAddress.Token,
-    VotingArtifact.abi
+    VotingArtifact.abi,
+    signer
   );
 
-  async function getBlockNumber() {
-    return await provider.getBlockNumber();
-  }
-
-  async function stuff() {
-    // const balance = await provider.getBalance(userAddress);
-    // return ethers.utils.formatEther(balance.toHexString());
-    const networkId = await provider.getNetwork();
-    return networkId;
-  }
-
   async function _getUserBalance() {
-    var nfts = 0;
-    const balance = await this._nft.balanceOf(this.state.selectedAddress);
-    this.setState({ userNFTs: [...nfts] });
+    const balance = await _nft.balanceOf(userAddress);
+    setUserNFTs(balance);
   }
 
   async function _awardRep(to) {
-    this._sendTransaction(this._nft.awardReputation, [to]);
+    _sendTransaction(_nft.awardReputation, [to]);
   } // ez: awardRep function
 
   async function _burnTokens(time) {
-    this._sendTransaction(this._nft._expireTokens, [60]);
+    _sendTransaction(_nft._expireTokens, [60]);
     console.log("sent transaction _burnTokens, 60s");
   }
   async function _pullRecentPrompt() {
-    let sendPromise = this._sendTransaction(
-      this._votingLogic.getRecentTopicPrompt,
-      []
-    );
+    let sendPromise = _sendTransaction(_votingLogic.getRecentTopicPrompt, []);
     console.log("pulled the most recent prompt from contract");
   }
 
   async function _sendTransaction(method, args) {
     try {
       const tx = await method.apply(null, args);
-      this.setState({ txBeingSent: tx.hash });
+      setTxBeingSent(tx.hash);
 
       const receipt = await tx.wait();
 
@@ -142,35 +134,6 @@ function DApp() {
     }
   }
 
-  // This is an utility method that turns an RPC error into a human readable
-  // message.
-  function _getRpcErrorMessage(error) {
-    if (error.data) {
-      return error.data.message;
-    }
-
-    return error.message;
-  }
-
-  // ez: chain state stuff
-  var chainState = {
-    userNFTs: [],
-    nftData: undefined,
-    selectedAddress: undefined,
-  };
-  function setChainState(childData) {
-    this.setState({ message: childData });
-  }
-
-  stuff()
-    .then((data) => {
-      console.log("testing: ", data);
-    })
-    .catch((err) => console.log(err));
-  getBlockNumber()
-    .then((data) => console.log("Block number: ", data))
-    .catch((err) => console.log(err));
-
   return (
     <div className="DApp">
       <Header
@@ -180,8 +143,8 @@ function DApp() {
       />
 
       <div className="DApp-body p-4 mx-auto">
-        <AwardReputationForm awardRep={(to) => this._awardRep(to)} />
-        <BurnTokensButton burnTokens={() => this._burnTokens()} />
+        <AwardReputationForm awardRep={(to) => _awardRep(to)} />
+        <BurnTokensButton burnTokens={() => _burnTokens()} />
         {/* <WalletInfo dataFromParent={chainState} /> */}
         <Outlet />
       </div>
