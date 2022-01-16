@@ -82,7 +82,6 @@ export default function Proposal() {
   let desc = "";
   let author = "";
 
-  console.log("PROPOSALID", typeof params.proposalId);
   switch (params.proposalId) {
     case "0":
       title = "Create foundational working groups and working group rules";
@@ -131,7 +130,6 @@ export default function Proposal() {
       author = "0xwhammy";
       break;
   }
-  console.log(title, desc, author);
 
   return (
     <div className="container vote-ui">

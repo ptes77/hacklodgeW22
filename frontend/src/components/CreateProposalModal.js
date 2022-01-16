@@ -74,9 +74,6 @@ export default function CreateProposalModal(props) {
     getAllTopics();
   }, []);
 
-  console.log("curr topic id  ", currTopicId);
-  console.log("All topics", topics);
-
   return (
     <div
       className="proposal-modal"
