@@ -1,8 +1,9 @@
 import React from "react";
+import "./AwardReputationForm.css";
 
 export function AwardReputationForm({ awardRep }) {
   return (
-    <div>
+    <div className="utils">
       <h4>Award Reputation: </h4>
       <form
         onSubmit={(event) => {
