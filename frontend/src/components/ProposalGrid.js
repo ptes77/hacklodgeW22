@@ -7,6 +7,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CreateProposalModal from "./CreateProposalModal";
 import * as ipfsAPI from "ipfs-http-client";
 import { BufferList } from "bl";
+import { ethers } from "ethers";
+
+import RVotesArtifact from "../contracts/RVotes.json";
+import RVotesContractAddress from "../contracts/contract-address.json";
+import VotingArtifact from "../contracts/Voting.json";
+import VotingContractAddress from "../contracts/contract-address-voting.json";
 
 export default function ProposalGrid() {
   const [showModal, setShowModal] = useState(false);
@@ -20,6 +26,53 @@ export default function ProposalGrid() {
   function toggleModal() {
     setShowModal(!showModal);
   }
+
+  // Initialize ethers
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner(0); //ez: set this to 0 for metamask
+  const _nft = new ethers.Contract( // ez: call _nft.<function_name>([]) for token methods
+    RVotesContractAddress.Token,
+    RVotesArtifact.abi,
+    signer
+  );
+  const _votingLogic = new ethers.Contract( // ez: call _votingLogic.<function_name>([]) for voting
+    VotingContractAddress.Token,
+    VotingArtifact.abi,
+    signer
+  );
+
+  async function getCurrTopicId() {
+    const curr = (await _votingLogic.nextTopicNumber()) - 1;
+    setCurrTopicId(curr);
+    return curr;
+  }
+
+  async function getAllTopics() {
+    let maxTopics = 0;
+    let mapping = {};
+    getCurrTopicId()
+      .then((data) => {
+        maxTopics = data;
+      })
+      .then(() => {
+        for (let i = 0; i < maxTopics; i++) {
+          _votingLogic.topics(i).then((topic) => (mapping[i] = topic));
+        }
+      })
+      .then(() => setTopics(mapping));
+    return mapping;
+  }
+
+  let grid;
+
+  useEffect(() => {
+    getAllTopics().then((mapping) => {
+      console.log(mapping);
+      for (const item in mapping) {
+        console.log("TESTING ", item, " IS ", mapping[item]);
+      }
+    });
+  }, []);
 
   const ipfs = ipfsAPI.create({
     host: "ipfs.infura.io",
@@ -69,7 +122,7 @@ export default function ProposalGrid() {
   // );
 
   const body =
-    "lorem ipsum I want a chicken sandwich and a 4-piece chicken strips";
+    "Click to view more details (author, description, voting options) about this proposal";
 
   return (
     <>

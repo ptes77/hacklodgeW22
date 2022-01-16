@@ -144,14 +144,6 @@ function DApp() {
         userAddress={userAddress}
         setUserAddress={setUserAddressFull}
       />
-      {showModal && (
-        <ConnectWalletModal
-          toggleModal={toggleModal}
-          userAddress={userAddress}
-          setUserAddress={setUserAddressFull}
-          network={network}
-        />
-      )}
       <div className="DApp-body p-4 mx-auto">
         <Outlet />
         <AwardReputationForm awardRep={(to) => _awardRep(to)} />
@@ -160,6 +152,14 @@ function DApp() {
         <p>Current wallet: {userAddress}</p>
         <Button onClick={() => _getUserBalance()}>Update Balance</Button>
       </div>
+      {showModal && (
+        <ConnectWalletModal
+          toggleModal={toggleModal}
+          userAddress={userAddress}
+          setUserAddress={setUserAddressFull}
+          network={network}
+        />
+      )}
     </div>
   );
 }

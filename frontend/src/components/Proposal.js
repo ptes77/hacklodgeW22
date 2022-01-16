@@ -48,10 +48,28 @@ export default function Proposal() {
 
   function submitVote() {
     if ([1, 2, 3].includes(voteValue)) {
-      _votingLogic.vote(params.proposalId, voteValue);
+      _votingLogic
+        .vote(params.proposalId, voteValue)
+        .then(() => console.log("Successfully submitted vote!"))
+        .catch((err) => console.error(err));
     } else {
       console.error("Invalide vote value!");
     }
+  }
+
+  function distributeReputation() {
+    _votingLogic
+      .distributeReputation(params.proposalId)
+      .then((data) => {
+        if (data) {
+          console.log("Distribution successful!");
+        } else {
+          console.log("Distribution unsuccessful, check logs");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   // async function _getUserBalance() {
@@ -59,66 +77,71 @@ export default function Proposal() {
   // }
 
   // _getUserBalance(userAddress);
-  console.log("balance:", balance);
+
+  let title = "";
+  let desc = "";
+  let author = "";
+
+  console.log("PROPOSALID", typeof params.proposalId);
+  switch (params.proposalId) {
+    case "0":
+      title = "Create foundational working groups and working group rules";
+      desc = `
+        Create four foundational working groups and establish rules related to the creation, management, and dissolution of working groups within the AveryDAO. 
+
+        1. Meta-Governance
+        2. ENS Ecosystem
+        3. Community
+        4. Public Goods
+        
+        This proposal also sets out rules related to the creation and dissolution of working groups and outlines how working groups will be managed within the DAO.
+        `;
+      author = "jamespark.eth";
+      break;
+    case "1":
+      title = "Ratification of the AveryDAO Constitution";
+      desc = `This vote proposes to ratify the AveryDAO Constitution with SHA1 hash e92b37nls84n3v2lk442bv3j2f1, reproduced below for convenience.
+
+      If, at the end of the voting period, all articles have at least two-thirds approval, the Constitution as a whole will be considered passed, effective immediately.
+      
+      If at least one article has less than two-thirds approval at the end of the voting period, only the articles with at least two-thirds approval will be considered passed, and amendment and ratification of the remaining articles, and any new articles, becomes the responsibility of AveryDAO delegates.
+      `;
+      author = "adrian.eth";
+      break;
+    case "2":
+      title = "What option will bots prefer?";
+      desc = "If you are a human, please do not vote on this.";
+      author = "0xturingtest";
+      break;
+    case "3":
+      title = "Avery workshop 2021 Autumn community voting";
+      desc = `After watching the project pitch at the Avery workshop, please vote for your favourite project. The winning project wins $1000 worth of Shutup Coin and you will get the community voter POAP badge.`;
+      author = "chancellor.eth";
+      break;
+    case "4":
+      title =
+        "How many copies should we mint for our first UpAvery NFT giveaway?";
+      desc = `For more detail, please read https://avery.caltech.edu/constitution/`;
+      author = "0xajay";
+      break;
+    default:
+      title =
+        "Remove doors from Avery House rooms to rekindle social interaction";
+      desc = `There will be more information released on this groundbreaking change. Please contact house stewards for more information.`;
+      author = "0xwhammy";
+      break;
+  }
+  console.log(title, desc, author);
 
   return (
     <div className="container vote-ui">
       <div className="row">
         <div className="col-8 text-left pe-4">
           <div className="text-start  p-3 proposal-title">
-            Remove doors from Avery House rooms to rekindle social interaction
-            <p className="proposal-author">By: 0xwhammy</p>
+            {title}
+            <p className="proposal-author">By: {author}</p>
           </div>
-          <div className="text-start  p-3 proposal-body">
-            Proposal Body lorem ipsum pasoidfjpaosdfijpaosdijfpoadsjf poaisdf
-            poaijsd fpoaid sjfpoaijsd fpoaijd sfpoaisdj fpoaijdsf psaoijdf
-            pasodfij a psodfijpasdf ijpaosdij fopaisdj fpoaids jfpoaij sdfpoia
-            jsdfpoiajs dfpoij asdpfoi jasdpfoij pasodifj poaisd fpoiasd fpa
-            sdjfpoi asdfpoij asdpofijapsdf ijoapsdijf pasidjf poaisdjf opasidj
-            fpaosijdfpoasi jdfpoasid jfpaosidjf paoidsjf paosidjfpouqhwroiuhew
-            oriqjnwer ijqnw pfoeijqpw eofijpozixchv pozixcjv pqoiwnpeoiuwhr
-            fpoausdh goiuysdovjcn xlcozvjoixcvubhopaidfj poijwer poqiwej r
-            Proposal Body lorem ipsum pasoidfjpaosdfijpaosdijfpoadsjf poaisdf
-            poaijsd fpoaid sjfpoaijsd fpoaijd sfpoaisdj fpoaijdsf psaoijdf
-            pasodfij a psodfijpasdf ijpaosdij fopaisdj fpoaids jfpoaij sdfpoia
-            jsdfpoiajs dfpoij asdpfoi jasdpfoij pasodifj poaisd fpoiasd fpa
-            sdjfpoi asdfpoij asdpofijapsdf ijoapsdijf pasidjf poaisdjf opasidj
-            fpaosijdfpoasi jdfpoasid jfpaosidjf paoidsjf paosidjfpouqhwroiuhew
-            oriqjnwer ijqnw pfoeijqpw eofijpozixchv pozixcjv pqoiwnpeoiuwhr
-            fpoausdh goiuysdovjcn xlcozvjoixcvubhopaidfj poijwer poqiwej r
-            Proposal Body lorem ipsum pasoidfjpaosdfijpaosdijfpoadsjf poaisdf
-            poaijsd fpoaid sjfpoaijsd fpoaijd sfpoaisdj fpoaijdsf psaoijdf
-            pasodfij a psodfijpasdf ijpaosdij fopaisdj fpoaids jfpoaij sdfpoia
-            jsdfpoiajs dfpoij asdpfoi jasdpfoij pasodifj poaisd fpoiasd fpa
-            sdjfpoi asdfpoij asdpofijapsdf ijoapsdijf pasidjf poaisdjf opasidj
-            fpaosijdfpoasi jdfpoasid jfpaosidjf paoidsjf paosidjfpouqhwroiuhew
-            oriqjnwer ijqnw pfoeijqpw eofijpozixchv pozixcjv pqoiwnpeoiuwhr
-            fpoausdh goiuysdovjcn xlcozvjoixcvubhopaidfj poijwer poqiwej r
-            Proposal Body lorem ipsum pasoidfjpaosdfijpaosdijfpoadsjf poaisdf
-            poaijsd fpoaid sjfpoaijsd fpoaijd sfpoaisdj fpoaijdsf psaoijdf
-            pasodfij a psodfijpasdf ijpaosdij fopaisdj fpoaids jfpoaij sdfpoia
-            jsdfpoiajs dfpoij asdpfoi jasdpfoij pasodifj poaisd fpoiasd fpa
-            sdjfpoi asdfpoij asdpofijapsdf ijoapsdijf pasidjf poaisdjf opasidj
-            fpaosijdfpoasi jdfpoasid jfpaosidjf paoidsjf paosidjfpouqhwroiuhew
-            oriqjnwer ijqnw pfoeijqpw eofijpozixchv pozixcjv pqoiwnpeoiuwhr
-            fpoausdh goiuysdovjcn xlcozvjoixcvubhopaidfj poijwer poqiwej r
-            Proposal Body lorem ipsum pasoidfjpaosdfijpaosdijfpoadsjf poaisdf
-            poaijsd fpoaid sjfpoaijsd fpoaijd sfpoaisdj fpoaijdsf psaoijdf
-            pasodfij a psodfijpasdf ijpaosdij fopaisdj fpoaids jfpoaij sdfpoia
-            jsdfpoiajs dfpoij asdpfoi jasdpfoij pasodifj poaisd fpoiasd fpa
-            sdjfpoi asdfpoij asdpofijapsdf ijoapsdijf pasidjf poaisdjf opasidj
-            fpaosijdfpoasi jdfpoasid jfpaosidjf paoidsjf paosidjfpouqhwroiuhew
-            oriqjnwer ijqnw pfoeijqpw eofijpozixchv pozixcjv pqoiwnpeoiuwhr
-            fpoausdh goiuysdovjcn xlcozvjoixcvubhopaidfj poijwer poqiwej r
-            Proposal Body lorem ipsum pasoidfjpaosdfijpaosdijfpoadsjf poaisdf
-            poaijsd fpoaid sjfpoaijsd fpoaijd sfpoaisdj fpoaijdsf psaoijdf
-            pasodfij a psodfijpasdf ijpaosdij fopaisdj fpoaids jfpoaij sdfpoia
-            jsdfpoiajs dfpoij asdpfoi jasdpfoij pasodifj poaisd fpoiasd fpa
-            sdjfpoi asdfpoij asdpofijapsdf ijoapsdijf pasidjf poaisdjf opasidj
-            fpaosijdfpoasi jdfpoasid jfpaosidjf paoidsjf paosidjfpouqhwroiuhew
-            oriqjnwer ijqnw pfoeijqpw eofijpozixchv pozixcjv pqoiwnpeoiuwhr
-            fpoausdh goiuysdovjcn xlcozvjoixcvubhopaidfj poijwer poqiwej r
-          </div>
+          <div className="text-start p-3 proposal-body">{desc}</div>
         </div>
         <div className="col-4">
           <div className="border vote-box">
@@ -191,11 +214,20 @@ export default function Proposal() {
             </Button>
           </div>
         </div>
-        <Link to="/a/proposal">
-          <button type="button" className="btn btn-outline-primary">
-            back!
+        <span>
+          <Link to="/a/proposal">
+            <button type="button" className="btn btn-outline-primary">
+              back!
+            </button>
+          </Link>
+          <button
+            type="button"
+            className="btn btn-outline-primary"
+            onClick={distributeReputation}
+          >
+            distribute reputation
           </button>
-        </Link>
+        </span>
       </div>
     </div>
   );

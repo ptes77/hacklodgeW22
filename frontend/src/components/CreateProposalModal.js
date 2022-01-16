@@ -38,7 +38,7 @@ export default function CreateProposalModal(props) {
   );
 
   async function getCurrTopicId() {
-    const curr = await _votingLogic.nextTopicNumber();
+    const curr = (await _votingLogic.nextTopicNumber()) - 1;
     setCurrTopicId(curr);
     return curr;
   }
@@ -63,7 +63,7 @@ export default function CreateProposalModal(props) {
     // may have weird async behavior if too many people use at the same time
     console.log("submitting");
     getCurrTopicId();
-    _votingLogic.createTopic(title, 3, 240);
+    _votingLogic.createTopic(title, 3, 60);
     uploadProposalToIPFS();
     getAllTopics();
     console.log("done submitting!");
